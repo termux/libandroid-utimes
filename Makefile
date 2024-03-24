@@ -1,11 +1,11 @@
-CFLAGS += -fpic -shared -std=c11 -Wall -Wextra
+CFLAGS += -fPIC -std=c11 -Wall -Wextra
 
 all: libandroid-utimes.a libandroid-utimes.so
 libandroid-utimes.a: sys_time.o
 	$(AR) rcu $@ sys_time.o
 
-libandroid-utimes.so: sys_time.o
-	$(CC) $(LDFLAGS) -shared sys_time.c -o $@ -llog
+libandroid-utimes.so:
+	$(CC) $(LDFLAGS) -fPIC -shared sys_time.c -o $@
 
 sys_time.o: sys_time.c
 	$(CC) $(CFLAGS) -c sys_time.c -o $@
