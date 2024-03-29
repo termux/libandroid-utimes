@@ -53,15 +53,16 @@ int futimes(int fd, const struct timeval tv[2]) {
   return futimens(fd, tv ? ts : NULL);
 }
 
-int futimesat(int fd, const char* path, const struct timeval tv[2], int flags) {
+int futimesat(int fd, const char* path, const struct timeval tv[2]) {
   struct timespec ts[2];
   if (tv && (!timespec_from_timeval(&ts[0], tv[0]) || !timespec_from_timeval(&ts[1], tv[1]))) {
     errno = EINVAL;
     return -1;
   }
-  return utimensat(fd, path, tv ? ts : NULL, flags);
+  return utimensat(fd, path, tv ? ts : NULL, 0);
+
 }
 
-int lutimes(const char* path, const struct timeval tv[2]) {
-  return futimesat(AT_FDCWD, path, tv, AT_SYMLINK_NOFOLLOW);
+int lutimes(const char* path, const struct timespec ts[2]) {
+  return utimensat(AT_FDCWD, path, ts, AT_SYMLINK_NOFOLLOW);
 }
